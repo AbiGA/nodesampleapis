@@ -7,7 +7,6 @@ import bcrypt from 'bcryptjs';
 
 const router = express.Router();
 
-const posts: any = [];
 
 router.get('/users', (req, res) => {
     fetch('http://jsonplaceholder.typicode.com/users')
@@ -31,28 +30,20 @@ router.get('/users', (req, res) => {
 
 
 router.get('/posts', (req, res) => {
-    let comments:any = [];
-
+    
+    const posts:any = [];
     fetch ('http://jsonplaceholder.typicode.com/posts')
      .then(response => response.json())
      .then(data => {
          const arr: any = data;
-         arr.forEach((post: any) => {
-            //  comments.oid = comment.id;
-             posts.push(post);
+         arr.forEach((pst: any) => {
+             const post = new Post(pst);
+             post.save();
          });
-
-         fetch('http://jsonplaceholder.typicode.com/comments')
-         .then(response => response.json())
-         .then(data1 => {
-             const arr1: any = data1;
-             arr1.forEach((comment: any) => {
-                //  comments.oid = comment.id;
-                 comments.push(comment);
-             });
-
-         });
-
+         return res.json(data);
+     })
+     .catch(err => {
+        return res.json({error: "error"});
      });
 });
 

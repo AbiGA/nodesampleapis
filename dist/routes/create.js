@@ -5,10 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const user_1 = require("../models/user");
+const post_1 = require("../models/post");
 const node_fetch_1 = __importDefault(require("node-fetch"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const router = express_1.default.Router();
-const posts = [];
 router.get('/users', (req, res) => {
     node_fetch_1.default('http://jsonplaceholder.typicode.com/users')
         .then(response => response.json())
@@ -29,26 +29,19 @@ router.get('/users', (req, res) => {
     });
 });
 router.get('/posts', (req, res) => {
-    const comments = [];
-    const resr = [];
+    const posts = [];
     node_fetch_1.default('http://jsonplaceholder.typicode.com/posts')
         .then(response => response.json())
         .then(data => {
         const arr = data;
-        arr.forEach((post) => {
-            //  comments.oid = comment.id;
-            posts.push(post);
+        arr.forEach((pst) => {
+            const post = new post_1.Post(pst);
+            post.save();
         });
-        node_fetch_1.default('http://jsonplaceholder.typicode.com/comments')
-            .then(response => response.json())
-            .then(data1 => {
-            const arr1 = data1;
-            arr1.forEach((comment) => {
-                //  comments.oid = comment.id;
-                comments.push(comment);
-            });
-        });
-        return res.json(comments);
+        return res.json(data);
+    })
+        .catch(err => {
+        return res.json({ error: "error" });
     });
 });
 exports.createRouter = router;
