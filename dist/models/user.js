@@ -75,5 +75,8 @@ const userSchema = new Schema({
         bs: String
     }
 });
+// userSchema.methods.hasSamePassword = function(requestedPassword: string) {
+//     return bcrypt.compareSync(requestedPassword, this.password);
+// }
 exports.User = mongoose_1.default.model('User', userSchema);
 //# sourceMappingURL=user.js.map

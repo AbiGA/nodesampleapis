@@ -1,4 +1,5 @@
 import mongoose  from 'mongoose';
+import bcrypt from 'bcryptjs';
 
 const Schema = mongoose.Schema;
 
@@ -74,6 +75,10 @@ const userSchema = new Schema({
     }
 });
 
+// userSchema.methods.hasSamePassword = function(requestedPassword: string) {
+
+//     return bcrypt.compareSync(requestedPassword, this.password);
+// }
 
 
 export const User = mongoose.model('User', userSchema);
